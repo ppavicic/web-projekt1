@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Liga</title>
+</head>
+
+<body>
+    <div style="display: flex; align-items: baseline;">
+        <a href="/table" title="Tablica">Tablica</a>
+        <h1>RASPORED I REZULTATI</h1>
+        <% if (user.isAuthenticated) { %>
+        <form action="/logout" method="get">
+            <input type="submit" value="Odjava">
+        </form>
+        <% } else { %>
+        <ul>
+            <li>
+                <a href="/login" title="Prijava">
+                    Prijava
+                </a>
+            </li>
+            <li>
+                <a href="/sign-up" title="Sign up">Sign up</a>
+            </li>
+        </ul>
+        <% } %>
+    </div>
+
+    <% if (user.isAuthenticated) { %>
+    <h1 id="username">Welcome <%= user.name %></h1>
+    <% } %>
+
+    <div>
+        <h2 id="matchday1">Matchday 1</h2>
+        <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+        <button onclick="show('1', 'enter')">UNESI REZULTAT</button>
+        <form id='enter1' onsubmit="return enterResult('1')" hidden>
+            Club1: <input type="text" name="club1" id="1club1">
+            Goals1: <input type="text" name="goals1" id="1goals1">
+            Club2: <input type="text" name="club2" id="1club2">
+            Goals2: <input type="text" name="goals2" id="1goals2">
+            <input type="submit" value="Submit">
+        </form>
+        <% } %>
+        <% for (let x of data['Matchday 1']) { %>
+        <div>
+            <%=x.team1%> <%=x.score.ft[0]%> : <%=x.score.ft[1]%> <%=x.team2%>
+            <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+            <button
+                onclick="showUpdate('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>')">Izmijeni</button>
+            <form id='<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>'
+                onsubmit="return updateResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 1')"
+                hidden>
+                Goals1: <input type="text" name="goals1"
+                    id="goal1_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                Goals2: <input type="text" name="goals2"
+                    id="goal2_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                <input type="submit" value="Submit">
+            </form>
+            <% } %>
+        </div>
+        <%}%>
+        <hr>
+        <% if (user.isAuthenticated) { %>
+        <button onclick="show('1', 'comm')">DODAJ KOMENTAR</button>
+        <form id='comm1' onsubmit="return addComment('1')" hidden>
+            <textarea name="comment" id="commInput1"></textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of comments['Matchday 1']) { %>
+        <div id="comment_<%= x.time %>_<%= x.user %>">
+            (<%=x.time%> - <%=x.user%>) <%=x.comment%>
+            <% if (user.isAuthenticated && user.name == x.user) { %>
+            <button onclick="showUpdate('<%=x.time%>;<%=x.user%>;<%=x.comment%>')">Uredi</button>
+            <form id='<%=x.time%>;<%=x.user%>;<%=x.comment%>'
+                onsubmit="return updateComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 1')" hidden>
+                <textarea name="comment" id="comment_<%=x.time%>;<%=x.user%>;<%=x.comment%>"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+            <% if (user.isAuthenticated && (user.name == x.user || user.name == "admin@fer.hr")) { %>
+            <button onclick="deleteComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 1')">Izbrisi</button>
+            <%}%>
+        </div>
+        <%}%>
+    </div>
+
+    <div>
+        <h2 id="matchday2">Matchday 2</h2>
+        <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+        <button onclick="show('2', 'enter')">UNESI REZULTAT</button>
+        <form id='enter2' onsubmit="return enterResult('2')" hidden>
+            Club1: <input type="text" name="club1" id="2club1">
+            Goals1: <input type="text" name="goals1" id="2goals1">
+            Club2: <input type="text" name="club2" id="2club2">
+            Goals2: <input type="text" name="goals2" id="2goals2">
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of data['Matchday 2']) { %>
+        <div>
+            <%=x.team1%> <%=x.score.ft[0]%> : <%=x.score.ft[1]%> <%=x.team2%>
+            <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+            <button
+                onclick="showUpdate('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>')">Izmijeni</button>
+            <form id='<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>'
+                onsubmit="return updateResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 2')"
+                hidden>
+                Goals1: <input type="text" name="goals1"
+                    id="goal1_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                Goals2: <input type="text" name="goals2"
+                    id="goal2_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+        </div>
+        <%}%>
+        <hr>
+        <% if (user.isAuthenticated) { %>
+        <button onclick="show('2', 'comm')">DODAJ KOMENTAR</button>
+        <form id='comm2' onsubmit="return addComment('2')" hidden>
+            <textarea name="comment" id="commInput2"></textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of comments['Matchday 2']) { %>
+        <div id="comment_<%= x.time %>_<%= x.user %>">
+            (<%=x.time%> - <%=x.user%>) <%=x.comment%>
+            <% if (user.isAuthenticated && user.name == x.user) { %>
+            <button onclick="showUpdate('<%=x.time%>;<%=x.user%>;<%=x.comment%>')">Uredi</button>
+            <form id='<%=x.time%>;<%=x.user%>;<%=x.comment%>'
+                onsubmit="return updateComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 2')" hidden>
+                <textarea name="comment" id="comment_<%=x.time%>;<%=x.user%>;<%=x.comment%>"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+            <% if (user.isAuthenticated && (user.name == x.user || user.name == "admin@fer.hr")) { %>
+            <button onclick="deleteComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 2')">Izbrisi</button>
+            <%}%>
+        </div>
+        <%}%>
+    </div>
+
+    <div>
+        <h2 id="matchday3">Matchday 3</h2>
+        <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+        <button onclick="show('3', 'enter')">UNESI REZULTAT</button>
+        <form id='enter3' onsubmit="return enterResult('3')" hidden>
+            Club1: <input type="text" name="club1" id="3club1">
+            Goals1: <input type="text" name="goals1" id="3goals1">
+            Club2: <input type="text" name="club2" id="3club2">
+            Goals2: <input type="text" name="goals2" id="3goals2">
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of data['Matchday 3']) { %>
+        <div>
+            <%=x.team1%> <%=x.score.ft[0]%> : <%=x.score.ft[1]%> <%=x.team2%>
+            <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+            <button
+                onclick="showUpdate('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>')">Izmijeni</button>
+            <form id='<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>'
+                onsubmit="return updateResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 3')"
+                hidden>
+                Goals1: <input type="text" name="goals1"
+                    id="goal1_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                Goals2: <input type="text" name="goals2"
+                    id="goal2_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+        </div>
+        <%}%>
+        <hr>
+        <% if (user.isAuthenticated) { %>
+        <button onclick="show('3', 'comm')">DODAJ KOMENTAR</button>
+        <form id='comm3' onsubmit="return addComment('3')" hidden>
+            <textarea name="comment" id="commInput3"></textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of comments['Matchday 3']) { %>
+        <div id="comment_<%= x.time %>_<%= x.user %>">
+            (<%=x.time%> - <%=x.user%>) <%=x.comment%>
+            <% if (user.isAuthenticated && user.name == x.user) { %>
+            <button onclick="showUpdate('<%=x.time%>;<%=x.user%>;<%=x.comment%>')">Uredi</button>
+            <form id='<%=x.time%>;<%=x.user%>;<%=x.comment%>'
+                onsubmit="return updateComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 3')" hidden>
+                <textarea name="comment" id="comment_<%=x.time%>;<%=x.user%>;<%=x.comment%>"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+            <% if (user.isAuthenticated && (user.name == x.user || user.name == "admin@fer.hr")) { %>
+            <button onclick="deleteComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 3')">Izbrisi</button>
+            <%}%>
+        </div>
+        <%}%>
+    </div>
+    
+    <div>
+        <h2 id="matchday4">Matchday 4</h2>
+        <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+        <button onclick="show('4', 'enter')">UNESI REZULTAT</button>
+        <form id='enter4' onsubmit="return enterResult('4')" hidden>
+            Club1: <input type="text" name="club1" id="4club1">
+            Goals1: <input type="text" name="goals1" id="4goals1">
+            Club2: <input type="text" name="club2" id="4club2">
+            Goals2: <input type="text" name="goals2" id="4goals2">
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of data['Matchday 4']) { %>
+        <div>
+            <%=x.team1%> <%=x.score.ft[0]%> : <%=x.score.ft[1]%> <%=x.team2%>
+            <% if (user.isAuthenticated && user.name == "admin@fer.hr") { %>
+            <button
+                onclick="showUpdate('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>')">Izmijeni</button>
+            <form id='<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>'
+                onsubmit="return updateResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 4')"
+                hidden>
+                Goals1: <input type="text" name="goals1"
+                    id="goal1_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                Goals2: <input type="text" name="goals2"
+                    id="goal2_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+        </div>
+        <%}%>
+        <hr>
+        <% if (user.isAuthenticated) { %>
+        <button onclick="show('4','comm')">DODAJ KOMENTAR</button>
+        <form id='comm4' onsubmit="return addComment('4')" hidden>
+            <textarea name="comment" id="commInput4"></textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <%}%>
+        <% for (let x of comments['Matchday 4']) { %>
+        <div id="comment_<%= x.time %>_<%= x.user %>">
+            (<%=x.time%> - <%=x.user%>) <%=x.comment%>
+            <% if (user.isAuthenticated && user.name == x.user) { %>
+            <button onclick="showUpdate('<%=x.time%>;<%=x.user%>;<%=x.comment%>')">Uredi</button>
+            <form id='<%=x.time%>;<%=x.user%>;<%=x.comment%>'
+                onsubmit="return updateComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 4')" hidden>
+                <textarea name="comment" id="comment_<%=x.time%>;<%=x.user%>;<%=x.comment%>"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <%}%>
+            <% if (user.isAuthenticated && (user.name == x.user || user.name == "admin@fer.hr")) { %>
+            <button onclick="deleteComment('<%=x.time%>;<%=x.user%>;<%=x.comment%>', 'Matchday 4')">Izbrisi</button>
+            <%}%>
+        </div>
+        <%}%>
+    </div>
+
+        <script>
+            let username = document.getElementById('username').innerHTML.split(" ")[1];
+            
+            function show(param1, param2) {
+                let form
+                if(param1 == 1 && param2 == "comm"){
+                    form = document.getElementById('comm1');
+                }else if(param1 == 2  && param2 == "comm"){
+                    form = document.getElementById('comm2');
+                }else if(param1 == 3  && param2 == "comm"){
+                    form = document.getElementById('comm3');
+                }else if(param1 == 4  && param2 == "comm"){
+                    form = document.getElementById('comm4');
+                }else if(param1 == 4  && param2 == "enter"){
+                    form = document.getElementById('enter4');
+                }else if(param1 == 3  && param2 == "enter"){
+                    form = document.getElementById('enter3');
+                }else if(param1 == 2  && param2 == "enter"){
+                    form = document.getElementById('enter2');
+                }else{
+                    form = document.getElementById('enter1');
+                }
+
+                if (form.hidden == true) {
+                    form.removeAttribute("hidden");
+                } else {
+                    form.setAttribute("hidden", true);
+                }
+            }
+
+            function showUpdate(param){
+                let form = document.getElementById(param);
+                if (form.hidden == true) {
+                    form.removeAttribute("hidden");
+                } else {
+                    form.setAttribute("hidden", true);
+                }
+            }
+
+            async function addComment(param) {
+                let userInput
+                let matchday
+                if(param == 1){
+                    userInput = document.getElementById('commInput1').value;
+                    matchday = document.getElementById('matchday1').innerHTML
+                }else if(param == 2){
+                    userInput = document.getElementById('commInput2').value;
+                    matchday = document.getElementById('matchday2').innerHTML
+                }else if(param == 3){
+                    userInput = document.getElementById('commInput3').value;
+                    matchday = document.getElementById('matchday3').innerHTML
+                }else{
+                    userInput = document.getElementById('commInput4').value;
+                    matchday = document.getElementById('matchday4').innerHTML
+                }
+                const data = {userInput, matchday, username}
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                result = await fetch('/saveComment', params)
+            }
+
+            async function updateComment(param1, param2){
+                let userInput = document.getElementById('comment_'+param1).value;
+                const data = {userInput, param2, param1, username}
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                result = await fetch('/updateComment', params)
+            }
+
+            async function deleteComment(param1, param2){
+                const data = {param1, param2}
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                result = await fetch('/deleteComment', params)
+                window.location.reload()
+            }
+
+            async function updateResult(param1, param2){
+                let userInputGoal1 = document.getElementById('goal1_'+param1).value;
+                let userInputGoal2 = document.getElementById('goal2_'+param1).value;
+
+                const data = {userInputGoal1, userInputGoal2, param1, param2}
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                result = await fetch('/updateResult', params)
+            }
+
+            async function enterResult(param){
+                let club1
+                let club2
+                let goals1
+                let goals2
+                let matchday
+                if(param == 1){
+                    club1 = document.getElementById('1club1').value;
+                    club2 = document.getElementById('1club2').value;
+                    goals1 = document.getElementById('1goals1').value;
+                    goals2 = document.getElementById('1goals2').value;
+                    matchday = "Matchday 1"
+                }else if(param == 2){
+                    club1 = document.getElementById('2club1').value;
+                    club2 = document.getElementById('2club2').value;
+                    goals1 = document.getElementById('2goals1').value;
+                    goals2 = document.getElementById('2goals2').value;
+                    matchday = "Matchday 2"
+                }else if(param == 3){
+                    club1 = document.getElementById('3club1').value;
+                    club2 = document.getElementById('3club2').value;
+                    goals1 = document.getElementById('3goals1').value;
+                    goals2 = document.getElementById('3goals2').value;
+                    matchday = "Matchday 3"
+                }else{
+                    club1 = document.getElementById('4club1').value;
+                    club2 = document.getElementById('4club2').value;
+                    goals1 = document.getElementById('4goals1').value;
+                    goals2 = document.getElementById('4goals2').value;
+                    matchday = "Matchday 4"
+                }
+
+                const data = {club1, club2, goals1, goals2, matchday}
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                result = await fetch('/saveResult', params)
+            }
+        </script>
+</body>
+
+</html>
