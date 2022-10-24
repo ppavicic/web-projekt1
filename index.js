@@ -275,7 +275,7 @@ app.get('/table', function (req, res) {
 
 if(process.env.PORT){
   app.listen(port, function () {
-    console.log(`Server running at ${process.env.APP_URL}:${port}/`);
+    console.log(`Server running at ${process.env.APP_URL}`);
   })
 }else{
   app.listen(port, (error) => {
