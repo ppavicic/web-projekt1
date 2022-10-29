@@ -13,12 +13,12 @@
         <% if (user.isAuthenticated) { %>
         <ul style="display: flex; align-items: center; list-style-type: none;">
             <li>
+                <h1 id="username">Welcome <%= user.name %></h1>
+            </li>
+            <li>
                 <form action="/logout" method="get">
                     <input type="submit" value="Odjava">
                 </form>
-            </li>
-            <li>
-                <h1 id="username">Welcome <%= user.name %></h1>
             </li>
         </ul>
 
@@ -35,10 +35,6 @@
         </ul>
         <% } %>
     </div>
-
-    <% if (user.isAuthenticated) { %>
-    <h1 id="username">Welcome <%= user.name %></h1>
-    <% } %>
 
     <div>
         <h2 id="matchday1">Matchday 1</h2>
