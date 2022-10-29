@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div style="display: flex; align-items: baseline;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between;">
         <a href="/table" title="Tablica">Tablica</a>
         <h1>RASPORED I REZULTATI</h1>
         <% if (user.isAuthenticated) { %>
@@ -21,9 +21,9 @@
                     Prijava
                 </a>
             </li>
-            <li>
+            <%/*<li>
                 <a href="/sign-up" title="Sign up">Sign up</a>
-            </li>
+            </li> Signup, ali nije trazeno u zadatku da se implementira*/%>
         </ul>
         <% } %>
     </div>
