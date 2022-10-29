@@ -343,6 +343,7 @@
                                             body: JSON.stringify(data)
                                         }
                                         result = await fetch('/saveComment', params)
+                                        window.location.reload()
                                     }
 
                                     async function updateComment(param1, param2) {
@@ -361,6 +362,7 @@
                                             body: JSON.stringify(data)
                                         }
                                         result = await fetch('/updateComment', params)
+                                        window.location.reload()
                                     }
 
                                     async function deleteComment(param1, param2) {
@@ -397,6 +399,7 @@
                                             body: JSON.stringify(data)
                                         }
                                         result = await fetch('/updateResult', params)
+                                        window.location.reload()
                                     }
 
                                     async function enterResult(param) {
@@ -446,6 +449,7 @@
                                             body: JSON.stringify(data)
                                         }
                                         result = await fetch('/saveResult', params)
+                                        window.location.reload()
                                     }
                                 </script>
 </body>

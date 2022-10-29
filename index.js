@@ -94,6 +94,9 @@ app.post('/saveComment', requiresAuth(), function (req, res) {
   commsdata.comments.push(comment)
   let data = JSON.stringify(commsdata);
   fs.writeFileSync('comments.json', data);
+  res.json({
+    status: 'success'
+  })
 });
 
 app.post('/updateComment', requiresAuth(), function (req, res) {
@@ -120,6 +123,9 @@ app.post('/updateComment', requiresAuth(), function (req, res) {
   commsdata.comments.push(comment)
   let data = JSON.stringify(commsdata);
   fs.writeFileSync('comments.json', data);
+  res.json({
+    status: 'success'
+  })
 });
 
 app.post('/deleteComment', requiresAuth(), function (req, res) {
@@ -182,6 +188,9 @@ app.post('/saveResult', requiresAuth(), function (req, res) {
   let data2 = JSON.stringify(clubsdata);
   fs.writeFileSync('schedule.json', data1);
   fs.writeFileSync('clubs.json', data2)
+  res.json({
+    status: 'success'
+  })
 });
 
 app.post('/updateResult', requiresAuth(), function(req, res){
