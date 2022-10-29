@@ -11,7 +11,7 @@
         <a href="/table" title="Tablica">Tablica</a>
         <h1>RASPORED I REZULTATI</h1>
         <% if (user.isAuthenticated) { %>
-        <ul style="display: flex">
+        <ul style="display: flex; align-items: center; list-style-type: none;">
             <li>
                 <form action="/logout" method="get">
                     <input type="submit" value="Odjava">

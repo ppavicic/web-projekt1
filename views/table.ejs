@@ -14,6 +14,10 @@
 
 <body>
     <h1>TABLICA</h1>
+    <% if (user.isAuthenticated) { %>
+        <h1 id="username">Welcome <%= user.name %></h1>
+    <% } %>
+
     <table>
         <thead>
             <tr>

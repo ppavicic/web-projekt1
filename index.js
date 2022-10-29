@@ -254,8 +254,14 @@ app.post('/updateResult', requiresAuth(), function(req, res){
 });
 
 app.get('/table', function (req, res) {
-  //let userName = req.oidc.user.name
-  //const user = JSON.stringify(req.oidc.user);
+  req.user = {
+    isAuthenticated : req.oidc.isAuthenticated()
+  };
+
+  if (req.user.isAuthenticated) {
+    req.user.name = req.oidc.user.name;
+  }
+
   let rawdata = fs.readFileSync('clubs.json');
   let clubsdata = JSON.parse(rawdata);
   clubsdata.clubs.sort(function (a, b) {
@@ -268,7 +274,7 @@ app.get('/table', function (req, res) {
     }
   });
   res.render('table', {
-    //user: user,
+    user: req.user,
     data: clubsdata
   });
 });
