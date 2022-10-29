@@ -202,11 +202,11 @@ app.post('/updateResult', requiresAuth(), function(req, res){
   for(var i = 0; i < clubsdata.clubs.length; i++){
     if(clubsdata.clubs[i].name === search[0]){ //klub1 - home
       if(search[1] > search[2]){
-        clubsdata.clubs[i].points += 3;
+        clubsdata.clubs[i].points -= 3;
       }else if(search[1] == search[2]){
         clubsdata.clubs[i].points += 1;
       }else{
-        clubsdata.clubs[i].points -= 3;
+        clubsdata.clubs[i].points += 3;
       }
 
       if(search[1] < parseInt(req.body.userInputGoal1)){
@@ -222,11 +222,11 @@ app.post('/updateResult', requiresAuth(), function(req, res){
       }
     }else if(clubsdata.clubs[i].name === search[3]){ //klub2 - away
       if(search[2] > search[1]){
-        clubsdata.clubs[i].points += 3;
+        clubsdata.clubs[i].points -= 3;
       }else if(search[1] == search[2]){
         clubsdata.clubs[i].points += 1;
       }else{
-        clubsdata.clubs[i].points -= 3;
+        clubsdata.clubs[i].points += 3;
       }
 
       if(search[2] < parseInt(req.body.userInputGoal2)){
@@ -275,7 +275,7 @@ app.get('/table', function (req, res) {
 
 if(process.env.PORT){
   app.listen(port, function () {
-    console.log(`Server running at ${process.env.APP_URL}:${port}/`);
+    console.log(`Server running at ${process.env.APP_URL}`);
   })
 }else{
   app.listen(port, (error) => {
