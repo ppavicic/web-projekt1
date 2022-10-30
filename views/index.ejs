@@ -172,7 +172,7 @@
                         <button
                             onclick="showUpdate('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>')">Izmijeni</button>
                         <form id='<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>'
-                            onsubmit="return updateResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 3')"
+                            onsubmit="return updateNewResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 3')"
                             hidden>
                             Goals1: <input type="text" name="goals1"
                                 id="goal1_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
@@ -232,7 +232,7 @@
                                 <button
                                     onclick="showUpdate('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>')">Izmijeni</button>
                                 <form id='<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>'
-                                    onsubmit="return updateResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 4')"
+                                    onsubmit="return updateNewResult('<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>', 'Matchday 4')"
                                     hidden>
                                     Goals1: <input type="text" name="goals1"
                                         id="goal1_<%=x.team1%>;<%=x.score.ft[0]%>;<%=x.score.ft[1]%>;<%=x.team2%>">
@@ -399,6 +399,32 @@
                                             body: JSON.stringify(data)
                                         }
                                         result = await fetch('/updateResult', params)
+                                        window.location.reload()
+                                    }
+
+                                    async function updateNewResult(param1, param2) {
+                                        let userInputGoal1 = document.getElementById('goal1_' + param1).value;
+                                        let userInputGoal2 = document.getElementById('goal2_' + param1).value;
+                                        let search = param1.split(';', 4)
+
+                                        const data = {
+                                            userInputGoal1,
+                                            userInputGoal2,
+                                            param1,
+                                            param2
+                                        }
+                                        const params = {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify(data)
+                                        }
+                                        if(search[1] === ''){
+                                            result = await fetch('/updateNewResult', params)
+                                        }else{
+                                            result = await fetch('/updateResult', params)
+                                        }
                                         window.location.reload()
                                     }
 

@@ -1,7 +1,7 @@
 const express = require('express');
 var https = require('https')
 var fs = require('fs')
-const { auth, requiresAuth } = require('express-openid-connect'); 
+const { auth, requiresAuth } = require('express-openid-connect');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -20,9 +20,9 @@ const config = {
   issuerBaseURL: 'https://dev-q02guoproqbw6f6h.us.auth0.com',
   clientSecret: process.env.CLIENT_SECRET,
   authorizationParams: {
-    response_type: 'code' ,
+    response_type: 'code',
     //scope: "openid profile email"   
-   },
+  },
 };
 
 app.use(auth(config));
@@ -30,7 +30,7 @@ app.use(auth(config));
 app.get("/sign-up", (req, res) => {
   res.oidc.login({
     returnTo: '/',
-    authorizationParams: {      
+    authorizationParams: {
       screen_hint: "signup",
     },
   });
@@ -38,7 +38,7 @@ app.get("/sign-up", (req, res) => {
 
 app.get('/', (req, res) => {
   req.user = {
-    isAuthenticated : req.oidc.isAuthenticated()
+    isAuthenticated: req.oidc.isAuthenticated()
   };
   if (req.user.isAuthenticated) {
     req.user.name = req.oidc.user.name;
@@ -106,10 +106,10 @@ app.post('/updateComment', requiresAuth(), function (req, res) {
   vrijeme = d.getHours() + ":" + d.getMinutes()
 
   let search = req.body.param1.split(';', 3)
-  for(var i = 0; i < commsdata.comments.length; i++){
-    if(commsdata.comments[i].time == search[0] && commsdata.comments[i].round == req.body.param2 
-      && commsdata.comments[i].user == search[1] && commsdata.comments[i].comment == search[2]){
-        commsdata.comments.splice(i, 1)
+  for (var i = 0; i < commsdata.comments.length; i++) {
+    if (commsdata.comments[i].time == search[0] && commsdata.comments[i].round == req.body.param2
+      && commsdata.comments[i].user == search[1] && commsdata.comments[i].comment == search[2]) {
+      commsdata.comments.splice(i, 1)
     }
   }
 
@@ -133,10 +133,10 @@ app.post('/deleteComment', requiresAuth(), function (req, res) {
   let commsdata = JSON.parse(rawdata);
   let search = req.body.param1.split(';', 3)
 
-  for(var i = 0; i < commsdata.comments.length; i++){
-    if(commsdata.comments[i].time == search[0] && commsdata.comments[i].round == req.body.param2 
-      && commsdata.comments[i].user == search[1] && commsdata.comments[i].comment == search[2]){
-        commsdata.comments.splice(i, 1)
+  for (var i = 0; i < commsdata.comments.length; i++) {
+    if (commsdata.comments[i].time == search[0] && commsdata.comments[i].round == req.body.param2
+      && commsdata.comments[i].user == search[1] && commsdata.comments[i].comment == search[2]) {
+      commsdata.comments.splice(i, 1)
     }
   }
 
@@ -159,27 +159,27 @@ app.post('/saveResult', requiresAuth(), function (req, res) {
     team1: req.body.club1,
     team2: req.body.club2,
     score: {
-      ft:[parseInt(req.body.goals1), parseInt(req.body.goals2)]
+      ft: [parseInt(req.body.goals1), parseInt(req.body.goals2)]
     }
   };
 
-  for(var i = 0; i < clubsdata.clubs.length; i++){
-    if(clubsdata.clubs[i].name == req.body.club1){
-      if(req.body.goals1 > req.body.goals2){
+  for (var i = 0; i < clubsdata.clubs.length; i++) {
+    if (clubsdata.clubs[i].name == req.body.club1) {
+      if (req.body.goals1 > req.body.goals2) {
         clubsdata.clubs[i].points = clubsdata.clubs[i].points + 3;
-      }else if(req.body.goals1 == req.body.goals2){
+      } else if (req.body.goals1 == req.body.goals2) {
         clubsdata.clubs[i].points = clubsdata.clubs[i].points + 1;
       }
       clubsdata.clubs[i].goalsScored += parseInt(req.body.goals1);
-      clubsdata.clubs[i].goalsConceded += parseInt(req.body.goals2); 
-    }else if(clubsdata.clubs[i].name == req.body.club2){
-      if(req.body.goals2 > req.body.goals1){
+      clubsdata.clubs[i].goalsConceded += parseInt(req.body.goals2);
+    } else if (clubsdata.clubs[i].name == req.body.club2) {
+      if (req.body.goals2 > req.body.goals1) {
         clubsdata.clubs[i].points = clubsdata.clubs[i].points + 3;
-      }else if(req.body.goals1 == req.body.goals2){
+      } else if (req.body.goals1 == req.body.goals2) {
         clubsdata.clubs[i].points = clubsdata.clubs[i].points + 1;
       }
       clubsdata.clubs[i].goalsScored += parseInt(req.body.goals2);
-      clubsdata.clubs[i].goalsConceded += parseInt(req.body.goals1); 
+      clubsdata.clubs[i].goalsConceded += parseInt(req.body.goals1);
     }
   }
 
@@ -193,60 +193,61 @@ app.post('/saveResult', requiresAuth(), function (req, res) {
   })
 });
 
-app.post('/updateResult', requiresAuth(), function(req, res){
+app.post('/updateResult', function (req, res) {
   let rawdata = fs.readFileSync('schedule.json');
   let rawdata2 = fs.readFileSync('clubs.json');
   let scheduledata = JSON.parse(rawdata);
   let clubsdata = JSON.parse(rawdata2);
 
+  console.log(req.body)
   let search = req.body.param1.split(';', 4)
-  for(var i = 0; i < scheduledata.matches.length; i++){
-    if(scheduledata.matches[i].round == req.body.param2 && scheduledata.matches[i].team1 == search[0] 
-      && scheduledata.matches[i].team2 == search[3]){
-        scheduledata.matches[i].score.ft[0] = parseInt(req.body.userInputGoal1)
-        scheduledata.matches[i].score.ft[1] = parseInt(req.body.userInputGoal2)
-      }
+  for (var i = 0; i < scheduledata.matches.length; i++) {
+    if (scheduledata.matches[i].round == req.body.param2 && scheduledata.matches[i].team1 == search[0]
+      && scheduledata.matches[i].team2 == search[3]) {
+      scheduledata.matches[i].score.ft[0] = parseInt(req.body.userInputGoal1)
+      scheduledata.matches[i].score.ft[1] = parseInt(req.body.userInputGoal2)
+    }
   }
 
-  for(var i = 0; i < clubsdata.clubs.length; i++){
-    if(clubsdata.clubs[i].name === search[0]){ //klub1 - home
-      if(search[1] > search[2]){
+  for (var i = 0; i < clubsdata.clubs.length; i++) {
+    if (clubsdata.clubs[i].name === search[0]) { //klub1 - home
+      if (search[1] > search[2]) {
         clubsdata.clubs[i].points -= 3;
-      }else if(search[1] == search[2]){
+      } else if (search[1] == search[2]) {
         clubsdata.clubs[i].points += 1;
-      }else{
+      } else {
         clubsdata.clubs[i].points += 3;
       }
 
-      if(search[1] < parseInt(req.body.userInputGoal1)){
+      if (search[1] < parseInt(req.body.userInputGoal1)) {
         clubsdata.clubs[i].goalsScored += (parseInt(req.body.userInputGoal1) - parseInt(search[1]))
-      }else if(search[1] > parseInt(req.body.userInputGoal1)){
+      } else if (search[1] > parseInt(req.body.userInputGoal1)) {
         clubsdata.clubs[i].goalsScored -= (parseInt(search[1]) - parseInt(req.body.userInputGoal1))
       }
 
-      if(search[2] < parseInt(req.body.userInputGoal2)){
+      if (search[2] < parseInt(req.body.userInputGoal2)) {
         clubsdata.clubs[i].goalsConceded += (parseInt(req.body.userInputGoal2) - parseInt(search[2]))
-      }else if(search[2] > parseInt(req.body.userInputGoal2)){
+      } else if (search[2] > parseInt(req.body.userInputGoal2)) {
         clubsdata.clubs[i].goalsConceded -= (parseInt(search[2]) - parseInt(req.body.userInputGoal2))
       }
-    }else if(clubsdata.clubs[i].name === search[3]){ //klub2 - away
-      if(search[2] > search[1]){
+    } else if (clubsdata.clubs[i].name === search[3]) { //klub2 - away
+      if (search[2] > search[1]) {
         clubsdata.clubs[i].points -= 3;
-      }else if(search[1] == search[2]){
+      } else if (search[1] == search[2]) {
         clubsdata.clubs[i].points += 1;
-      }else{
+      } else {
         clubsdata.clubs[i].points += 3;
       }
 
-      if(search[2] < parseInt(req.body.userInputGoal2)){
+      if (search[2] < parseInt(req.body.userInputGoal2)) {
         clubsdata.clubs[i].goalsScored += (parseInt(req.body.userInputGoal2) - parseInt(search[2]))
-      }else if(search[2] > parseInt(req.body.userInputGoal2)){
+      } else if (search[2] > parseInt(req.body.userInputGoal2)) {
         clubsdata.clubs[i].goalsScored -= (parseInt(search[2]) - parseInt(req.body.userInputGoal2))
       }
 
-      if(search[1] < parseInt(req.body.userInputGoal1)){
+      if (search[1] < parseInt(req.body.userInputGoal1)) {
         clubsdata.clubs[i].goalsConceded += parseInt(parseInt(req.body.userInputGoal1) - parseInt(search[1]))
-      }else if(search[1] > parseInt(req.body.userInputGoal1)){
+      } else if (search[1] > parseInt(req.body.userInputGoal1)) {
         clubsdata.clubs[i].goalsConceded -= parseInt(parseInt(search[1]) - parseInt(req.body.userInputGoal1))
       }
 
@@ -262,9 +263,66 @@ app.post('/updateResult', requiresAuth(), function(req, res){
   })
 });
 
+app.post('/updateNewResult', function (req, res) {
+  let rawdata = fs.readFileSync('schedule.json');
+  let rawdata2 = fs.readFileSync('clubs.json');
+  let scheduledata = JSON.parse(rawdata);
+  let clubsdata = JSON.parse(rawdata2);
+
+  let search = req.body.param1.split(';', 4)
+  console.log(search)
+  for (var i = 0; i < scheduledata.matches.length; i++) {
+    if (scheduledata.matches[i].round == req.body.param2 && scheduledata.matches[i].team1 == search[0]
+      && scheduledata.matches[i].team2 == search[3]) {
+      scheduledata.matches[i].score.ft[0] = parseInt(req.body.userInputGoal1)
+      scheduledata.matches[i].score.ft[1] = parseInt(req.body.userInputGoal2)
+    }
+  }
+
+  for (var i = 0; i < clubsdata.clubs.length; i++) {
+    if (clubsdata.clubs[i].name === search[0]) { //klub1 - home
+      console.log(parseInt(req.body.userInputGoal1) + " " + parseInt(req.body.userInputGoal2))
+      if (parseInt(req.body.userInputGoal1) < parseInt(req.body.userInputGoal2)) {
+        console.log(clubsdata.clubs[i].points)
+      } else if (parseInt(req.body.userInputGoal1) == parseInt(req.body.userInputGoal2)) {
+        clubsdata.clubs[i].points += 1;
+      } else {
+        clubsdata.clubs[i].points += 3;
+      }
+
+      console.log( clubsdata.clubs[i].goalsScored)
+      clubsdata.clubs[i].goalsScored += parseInt(req.body.userInputGoal1)
+      clubsdata.clubs[i].goalsConceded += parseInt(req.body.userInputGoal2)
+      console.log( clubsdata.clubs[i].goalsScored)
+
+    } else if (clubsdata.clubs[i].name === search[3]) { //klub2 - away
+      if (parseInt(req.body.userInputGoal1) > parseInt(req.body.userInputGoal2)) {
+        console.log(clubsdata.clubs[i].points)
+      } else if (parseInt(req.body.userInputGoal1) == parseInt(req.body.userInputGoal2)) {
+        clubsdata.clubs[i].points += 1;
+      } else {
+        clubsdata.clubs[i].points += 3;
+      }
+
+      clubsdata.clubs[i].goalsScored += parseInt(req.body.userInputGoal2)
+      clubsdata.clubs[i].goalsConceded += parseInt(req.body.userInputGoal1)
+    }
+
+  }
+
+
+  let data1 = JSON.stringify(scheduledata);
+  let data2 = JSON.stringify(clubsdata);
+  fs.writeFileSync('schedule.json', data1);
+  fs.writeFileSync('clubs.json', data2)
+  res.json({
+    status: 'success'
+  })
+});
+
 app.get('/table', function (req, res) {
   req.user = {
-    isAuthenticated : req.oidc.isAuthenticated()
+    isAuthenticated: req.oidc.isAuthenticated()
   };
 
   if (req.user.isAuthenticated) {
@@ -288,11 +346,11 @@ app.get('/table', function (req, res) {
   });
 });
 
-if(process.env.PORT){
+if (process.env.PORT) {
   app.listen(port, function () {
     console.log(`Server running at ${process.env.APP_URL}`);
   })
-}else{
+} else {
   app.listen(port, (error) => {
     if (!error)
       console.log("Server is Successfully Running, and App is listening on port " + port)
