@@ -193,7 +193,7 @@ app.post('/saveResult', requiresAuth(), function (req, res) {
   })
 });
 
-app.post('/updateResult', function (req, res) {
+app.post('/updateResult', requiresAuth(), function (req, res) {
   let rawdata = fs.readFileSync('schedule.json');
   let rawdata2 = fs.readFileSync('clubs.json');
   let scheduledata = JSON.parse(rawdata);
@@ -263,7 +263,7 @@ app.post('/updateResult', function (req, res) {
   })
 });
 
-app.post('/updateNewResult', function (req, res) {
+app.post('/updateNewResult', requiresAuth(), function (req, res) {
   let rawdata = fs.readFileSync('schedule.json');
   let rawdata2 = fs.readFileSync('clubs.json');
   let scheduledata = JSON.parse(rawdata);
